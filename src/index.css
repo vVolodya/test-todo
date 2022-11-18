@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#task-name-input {
+  appearance: none;
+  border: none;
+  outline: none;
+  background: none;
+}
