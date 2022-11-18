@@ -1,27 +1,27 @@
-import { React, useContext, useState } from "react";
+import { useContext, useState } from "react";
 
 import { TodosContext } from "../../store/todos-context";
 
 import { ReactComponent as EditIcon } from "../../assets/pencil.svg";
-import { ReactComponent as CheckMarkIcon } from "../../assets/checkmark.svg";
+// import { ReactComponent as CheckMarkIcon } from "../../assets/checkmark.svg";
 
 export const Row = (props) => {
   const { dispatch } = useContext(TodosContext);
 
-  const [isReadOnly, setReadOnly] = useState(true);
-  const [inputName, setInputName] = useState(props.todo.task);
+  // const [isReadOnly, setReadOnly] = useState(true);
+  // const [inputName, setInputName] = useState(props.todo.task);
 
-  const inputStateHandler = () => {
-    setReadOnly((prevState) => !prevState);
-  };
+  // const inputStateHandler = () => {
+  //   setReadOnly((prevState) => !prevState);
+  // };
 
-  const inputNameHandler = (e) => {
-    setInputName(e.target.value);
-    dispatch({
-      type: "EDIT_TODO",
-      payload: { id: props.todo.id, taskName: e.target.value },
-    });
-  };
+  // const inputNameHandler = (e) => {
+  //   setInputName(e.target.value);
+  //   dispatch({
+  //     type: "EDIT_TODO",
+  //     payload: { id: props.todo.id, taskName: e.target.value },
+  //   });
+  // };
 
   const deleteHandler = () => {
     dispatch({ type: "DELETE_TODO", payload: props.todo.id });
@@ -37,7 +37,7 @@ export const Row = (props) => {
       className={`flex w-full p-4 mb-2 justify-between items-center
     ${props.todo.isCompleted ? "bg-gray-400 " : "bg-green-300"}`}
     >
-      <input
+      {/* <input
         id="task-name-input"
         value={inputName}
         onChange={inputNameHandler}
@@ -45,10 +45,30 @@ export const Row = (props) => {
         className={`ml-2 text-xl font-sans font-medium
       ${!isReadOnly ? "font-bold" : null}
       ${props.todo.isCompleted ? "text-white line-through" : "text-gray-700"}`}
-      />
+      /> */}
+      <div>
+        <p
+          className={`ml-2 text-xl font-sans font-medium
+      ${props.todo.isCompleted ? "text-white line-through" : "text-gray-700"}`}
+        >
+          {props.todo.task}
+        </p>
+        <p
+          className={`ml-2 text-xl font-sans font-medium
+      ${props.todo.isCompleted ? "text-white line-through" : "text-gray-700"}`}
+        >
+          {props.todo.description}
+        </p>
+        <p
+          className={`ml-2 text-xl font-sans font-medium
+      ${props.todo.isCompleted ? "text-white line-through" : "text-gray-700"}`}
+        >
+          {props.todo.date}
+        </p>
+      </div>
 
       <div className="w-1/6 flex justify-between items-center mr-2">
-        {isReadOnly ? (
+        {/* {isReadOnly ? (
           <button
             onClick={inputStateHandler}
             type="button"
@@ -66,7 +86,16 @@ export const Row = (props) => {
           >
             <CheckMarkIcon className="h-5 w-5" />
           </button>
-        )}
+        )} */}
+
+        <button
+          onClick={props.onEditTodo}
+          type="button"
+          aria-label="Edit the todo"
+          className="h-7 w-7 flex justify-center items-center bg-yellow-400 hover:bg-yellow-500 text-white font-bold rounded"
+        >
+          <EditIcon className="h-5 w-5" />
+        </button>
 
         <button
           type="button"
