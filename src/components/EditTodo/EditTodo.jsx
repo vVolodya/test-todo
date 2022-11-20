@@ -1,21 +1,39 @@
-import { useContext, useRef } from "react";
+import dayjs from "dayjs";
+
+import { useState, useRef, useContext } from "react";
 
 import { TodosContext } from "../../store/todos-context";
 
-export const EditTodo = (props) => {
+export const EditTodo = ({ todo, onEdit }) => {
   const { dispatch } = useContext(TodosContext);
 
+  const [task, setTask] = useState(todo.task);
+  const [desc, setDesc] = useState(todo.description);
 
+  const filesInputRef = useRef();
+  const dateInputRef = useRef();
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
-    // dispatch({
-    //   type: "EDIT_TODO",
-    //   payload: { id: props.todo.id, taskName: e.target.value },
-    // });
+    const filesNames = [];
 
-    props.onSaveTodo();
+    for (let i = 0; i < filesInputRef.current.files.length; i++) {
+      filesNames.push(filesInputRef.current.files[i].name);
+    }
+
+    dispatch({
+      type: "EDIT_TODO",
+      payload: {
+        id: todo.id,
+        task,
+        desc,
+        files: filesNames,
+        date: dayjs(dateInputRef.current.value).format("DD.MM.YYYY"),
+      },
+    });
+
+    onEdit();
   };
 
   return (
@@ -27,6 +45,8 @@ export const EditTodo = (props) => {
         <input
           type="text"
           name="task"
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
           placeholder="Title"
           className="flex-1 rounded shadow p-2 text-grey-dark mr-2"
           required
@@ -34,16 +54,25 @@ export const EditTodo = (props) => {
         <input
           type="text"
           name="description"
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
           placeholder="Description"
           className="flex-1 rounded shadow p-2 text-grey-dark mr-2"
           required
         />
         <input
           type="file"
-          name='files'
+          name="files"
+          ref={filesInputRef}
           multiple
           className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-        ></input>
+        />
+        <input
+          type="date"
+          name="due-date"
+          ref={dateInputRef}
+          min={new Date()}
+        />
       </div>
       <button
         type="submit"
