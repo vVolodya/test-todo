@@ -5,15 +5,11 @@ import { getDatabase, ref, set } from "firebase/database";
 import { getStorage, ref as sRef, uploadBytes } from "firebase/storage";
 import { app } from "../../firebase/firebase";
 
-import { React, useContext, useRef } from "react";
-
-import { TodosContext } from "../../store/todos-context";
+import { useRef } from "react";
 
 import { ReactComponent as PlusIcon } from "../../assets/plus.svg";
 
 export const AddTodo = () => {
-  const { dispatch } = useContext(TodosContext);
-
   const taskInputRef = useRef();
   const descInputRef = useRef();
   const filesInputRef = useRef();
@@ -33,24 +29,14 @@ export const AddTodo = () => {
         const storageRef = sRef(storage, `${todoID}/${currentFile.name}`);
         uploadBytes(storageRef, currentFile);
       }
-  
+
       for (let i = 0; i < filesInputRef.current.files.length; i++) {
         filesNames.push(filesInputRef.current.files[i].name);
       }
     }
 
-    const db = getDatabase(app);
-    set(ref(db, `todos/${todoID}`), {
-      id: todoID,
-      task: taskInputRef.current.value,
-      description: descInputRef.current.value,
-      date: dayjs(dateInputRef.current.value).format("DD.MM.YYYY"),
-      files: filesNames.join(","),
-      isCompleted: false,
-    });
-
     const newTask = {
-      id: uuid(),
+      id: todoID,
       task: taskInputRef.current.value,
       description: descInputRef.current.value,
       date: dayjs(dateInputRef.current.value).format("DD.MM.YYYY"),
@@ -58,12 +44,13 @@ export const AddTodo = () => {
       isCompleted: false,
     };
 
+    const db = getDatabase(app);
+    set(ref(db, `todos/${todoID}`), newTask);
+
     taskInputRef.current.value = "";
     descInputRef.current.value = "";
     filesInputRef.current.value = "";
     dateInputRef.current.value = "";
-
-    dispatch({ type: "ADD_TODO", payload: newTask });
   };
 
   return (

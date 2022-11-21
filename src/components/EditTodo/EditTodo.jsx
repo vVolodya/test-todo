@@ -2,6 +2,10 @@ import dayjs from "dayjs";
 
 import { useState, useRef, useContext } from "react";
 
+import { getDatabase, ref, set, update } from "firebase/database";
+import { getStorage, ref as sRef, uploadBytes } from "firebase/storage";
+import { app } from "../../firebase/firebase";
+
 import { TodosContext } from "../../store/todos-context";
 
 export const EditTodo = ({ todo, onEdit }) => {
@@ -18,19 +22,34 @@ export const EditTodo = ({ todo, onEdit }) => {
 
     const filesNames = [];
 
-    for (let i = 0; i < filesInputRef.current.files.length; i++) {
-      filesNames.push(filesInputRef.current.files[i].name);
+    if (filesInputRef.current.files.length > 0) {
+      for (let i = 0; i < filesInputRef.current.files.length; i++) {
+        const currentFile = filesInputRef.current.files[i];
+        const storage = getStorage();
+        const storageRef = sRef(storage, `${todo.id}/${currentFile.name}`);
+        uploadBytes(storageRef, currentFile);
+      }
+
+      for (let i = 0; i < filesInputRef.current.files.length; i++) {
+        filesNames.push(filesInputRef.current.files[i].name);
+      }
     }
+
+    const updatedTask = {
+      id: todo.id,
+      task,
+      description: desc,
+      files: filesNames.join(","),
+      date: dayjs(dateInputRef.current.value).format("DD.MM.YYYY"),
+      isCompleted: false,
+    };
+
+    const db = getDatabase(app);
+    update(ref(db, `todos/${todo.id}`), updatedTask);
 
     dispatch({
       type: "EDIT_TODO",
-      payload: {
-        id: todo.id,
-        task,
-        desc,
-        files: filesNames,
-        date: dayjs(dateInputRef.current.value).format("DD.MM.YYYY"),
-      },
+      payload: updatedTask,
     });
 
     onEdit();

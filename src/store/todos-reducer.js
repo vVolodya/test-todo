@@ -4,9 +4,6 @@ export const todosReducer = (state, action) => {
     case "INIT_TODOS":
       return [...action.payload];
 
-    case "ADD_TODO":
-      return [...state, action.payload];
-
     case "COMPLETE_TODO":
       return action.payload.state
         ? [

@@ -2,6 +2,9 @@ import dayjs from "dayjs";
 
 import { useEffect, useContext, useMemo } from "react";
 
+import { getDatabase, ref, update } from "firebase/database";
+import { app } from "../../firebase/firebase";
+
 import { TodosContext } from "../../store/todos-context";
 
 import { AddTodo } from "../AddTodo/AddTodo";
@@ -18,6 +21,9 @@ export const Todos = () => {
       const todoDate = todo.date;
 
       if (todoDate <= today) {
+        const db = getDatabase(app);
+        update(ref(db, `todos/${todo.id}`), { isCompleted: true });
+
         dispatch({
           type: "COMPLETE_TODO",
           payload: { id: todo.id, state: true },

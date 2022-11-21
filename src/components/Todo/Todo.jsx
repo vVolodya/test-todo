@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { getDatabase, ref, remove } from "firebase/database";
+import { getDatabase, ref, remove, update } from "firebase/database";
 import { getStorage, ref as sRef, deleteObject } from "firebase/storage";
 import { app } from "../../firebase/firebase";
 
@@ -39,11 +39,16 @@ export const Todo = () => {
 
   const completeHandler = (e) => {
     const state = e.target.checked;
+
+    const db = getDatabase(app);
+    update(ref(db, `todos/${todo.id}`), { isCompleted: state });
+
     dispatch({ type: "COMPLETE_TODO", payload: { id: todo.id, state } });
   };
 
   const removeEditForm = () => {
     setIsEditing(false);
+    navigate("/");
   };
 
   return (
