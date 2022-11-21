@@ -118,6 +118,7 @@ export const EditTodo = ({ todo, onEdit }) => {
           name="due-date"
           ref={dateInputRef}
           min={new Date()}
+          required
         />
       </div>
       <button

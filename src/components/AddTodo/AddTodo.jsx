@@ -111,6 +111,7 @@ export const AddTodo = () => {
           name="due-date"
           ref={dateInputRef}
           min={new Date()}
+          required
         />
       </div>
       <button type="submit" aria-label="Add todo">
