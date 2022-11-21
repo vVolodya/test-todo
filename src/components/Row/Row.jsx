@@ -2,6 +2,12 @@ import { Link } from "react-router-dom";
 
 import { ReactComponent as EditIcon } from "../../assets/pencil.svg";
 
+/**
+ * @description
+ * Component for showing a todo
+ * @returns {JSX.Element}
+ */
+
 export const Row = (props) => {
   return (
     <div

@@ -12,6 +12,12 @@ import { Todo } from "./components/Todo/Todo";
 function App() {
   const { dispatch } = useContext(TodosContext);
 
+  /**
+   * Converts firebase object to an array
+   * @param {object} obj - Object with todos
+   * @returns {array} array with todos
+   */
+
   const converter = (obj) => {
     const result = [];
 
@@ -22,14 +28,17 @@ function App() {
     return result;
   };
 
+  /**
+   * Receiving todos from Firebase on mount
+   * @param {object} snapshot - Firebase snapshot
+   */
+
   useEffect(() => {
     const db = getDatabase(app);
     const todosRef = ref(db, "todos");
     onValue(todosRef, (snapshot) => {
       const data = snapshot.val();
-
       const todos = converter(data);
-
       dispatch({ type: "INIT_TODOS", payload: todos });
     });
   }, [dispatch]);

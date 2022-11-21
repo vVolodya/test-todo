@@ -1,3 +1,8 @@
+/**
+ * @description
+ * Initializing the Firebase instance
+ */
+
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {

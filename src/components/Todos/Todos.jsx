@@ -10,15 +10,36 @@ import { TodosContext } from "../../store/todos-context";
 import { AddTodo } from "../AddTodo/AddTodo";
 import { Row } from "../Row/Row";
 
+/**
+ * @description
+ * Todos list component
+ * @returns {JSX.Element}
+ */
+
 export const Todos = () => {
   const { dispatch, todos } = useContext(TodosContext);
 
+  /**
+   * @description
+   * useMemo hook to memoize the todos array
+   */
+
   const memoizedTodos = useMemo(() => todos, []);
+
+  /**
+   * @description
+   * useEffect hook to check if any of the todos are outdated
+   */
 
   useEffect(() => {
     memoizedTodos.forEach((todo) => {
       const today = dayjs(new Date()).format("DD.MM.YYYY");
       const todoDate = todo.date;
+
+      /**
+       * @description
+       * Make the todo completed if the date is outdated
+       */
 
       if (todoDate <= today) {
         const db = getDatabase(app);
