@@ -29,7 +29,7 @@ export const todosReducer = (state, action) => {
                 ...todo,
                 task: action.payload.task,
                 description: action.payload.desc,
-                files: [...action.payload.files],
+                files: action.payload.files,
                 date: action.payload.date,
               }
             : todo
