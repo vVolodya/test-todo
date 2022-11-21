@@ -33,7 +33,7 @@ export const Todo = () => {
 
   /**
    * @description
-   * Splitting the files string to an array
+   * Splitting the files string into an array
    */
 
   const filesArr = todo.files.split(",");

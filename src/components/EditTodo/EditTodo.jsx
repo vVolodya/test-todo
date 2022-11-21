@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 
 import { useState, useRef, useContext } from "react";
 
-import { getDatabase, ref, set, update } from "firebase/database";
+import { getDatabase, ref, update } from "firebase/database";
 import { getStorage, ref as sRef, uploadBytes } from "firebase/storage";
 import { app } from "../../firebase/firebase";
 
